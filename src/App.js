@@ -1,25 +1,38 @@
-import "./App.css";
-import { Routes, Route } from "react-router-dom";
-import { PrivateRoute } from "./Routes";
-import { Login } from "./Auth";
-import { PrivatePage } from "./Pages";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
+import { useAuth } from "./Store";
+
+import { Header } from "./components";
+import { Login } from "./auth";
+import { Home, News, Contact } from "./Pages";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<h1>Home</h1>} />
-      <Route path="/login" element={<Login />} />
+    <>
+      <Header />
 
-      <Route
-        path="/private"
-        element={
-          <PrivateRoute>
-            <PrivatePage />
-          </PrivateRoute>
-        }
-      />
-    </Routes>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/news" element={<News />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="/protected"
+          element={<RequireAuth>Protected</RequireAuth>}
+        />
+      </Routes>
+    </>
   );
+}
+
+function RequireAuth({ children }) {
+  let auth = useAuth();
+  let location = useLocation();
+
+  if (!auth.user) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  return children;
 }
 
 export default App;

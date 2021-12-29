@@ -1,26 +1,26 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import useAuth from "../Auth";
+import { useAuth } from "../Store";
 
 function Login() {
-  const auth = useAuth();
-  const navigate = useNavigate();
-  const location = useLocation();
+  let location = useLocation();
+  let navigate = useNavigate();
+  let auth = useAuth();
 
-  const from = location.state?.from?.pathname || "/";
+  let from = location.state?.from?.pathname || "/";
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     let formData = new FormData(e.target);
     let username = formData.get("username");
 
-    auth.login(username, () => {
+    auth.handleSignin(username, () => {
       navigate(from, { replace: true });
     });
   };
   return (
     <div>
       <p>You must log in to view the page at {from}</p>
-
       <form onSubmit={handleSubmit}>
         <label>
           Username: <input name="username" type="text" />
