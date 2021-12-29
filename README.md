@@ -13,5 +13,5 @@ A simple React route with authentication.
 
 ## How to use it to your project?
 
-- Configure callback in `src/Auth/Login.js`
+- Configure callback in `src/auth/Login.js`
 - See example private route in `src/App.js`
